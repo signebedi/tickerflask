@@ -1,1 +1,1 @@
-# ticker-flask
+# tickerflask

@@ -20,7 +20,7 @@ with open('requirements.txt', encoding="utf-8") as f:
 setup(
     name='tickerflask',
     version=version,
-    url='https://github.com/signebedi/ticker-flask',
+    url='https://github.com/signebedi/tickerflask',
     author='Sig Janoska-Bedi',
     author_email='signe@atreeus.com',
     description='a yfinance flask wrapper API',
