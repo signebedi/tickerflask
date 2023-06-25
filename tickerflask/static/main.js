@@ -1,3 +1,7 @@
+function plotGraph(graphJSON) {
+    Plotly.react('chart', graphJSON, {});
+}
+
 $(document).ready(function () {
     $('#get_latest_price_form form').on('submit', function (e) {
         e.preventDefault();
@@ -22,7 +26,10 @@ $(document).ready(function () {
         var interval = $('#interval_spread').val();
         $.getJSON('/get_price_spread', { symbol: symbol, period: period, interval: interval })
             .done(function (data) {
-                $('#price_spread_result').text(JSON.stringify(data));
+                var graphJSON = JSON.parse(data.graphJSON);
+                plotGraph(graphJSON);
+    
+                $('#price_spread_result').text(JSON.stringify(data.data));
             })
             .fail(function (jqxhr, textStatus, error) {
                 var err = textStatus + ", " + error;
