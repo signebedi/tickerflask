@@ -37,8 +37,8 @@ def latest_price():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-@app.route('/get_price_spread_basic', methods=['GET'])
-def price_spread_basic():
+@app.route('/get_price_spread', methods=['GET'])
+def price_spread():
     symbol = request.args.get('symbol', default = '', type = str)
     period = request.args.get('period', default = '1d', type = str)
     interval = request.args.get('interval', default = '1d', type = str)
@@ -48,8 +48,8 @@ def price_spread_basic():
     except Exception as e:
         return jsonify({'error': str(e)}), 400
 
-@app.route('/get_price_spread', methods=['GET'])
-def price_spread():
+@app.route('/get_price_spread_plotly', methods=['GET'])
+def price_spread_with_plotly():
 
     symbol = request.args.get('symbol', default = '', type = str)
     period = request.args.get('period', default = '1d', type = str)

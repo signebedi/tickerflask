@@ -24,7 +24,7 @@ $(document).ready(function () {
         var symbol = $('#symbol_spread').val();
         var period = $('#period_spread').val();
         var interval = $('#interval_spread').val();
-        $.getJSON('/get_price_spread', { symbol: symbol, period: period, interval: interval })
+        $.getJSON('/get_price_spread_plotly', { symbol: symbol, period: period, interval: interval })
             .done(function (data) {
                 var graphJSON = JSON.parse(data.graphJSON);
                 plotGraph(graphJSON);
