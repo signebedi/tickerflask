@@ -21,17 +21,26 @@
 
 
                 <fieldset class="form-group">
-                    <label for="symbol">Symbol:</label>
+                    <label for="symbol" aria-labelledby="LatestSymbolHelpInline">Symbol</label>
+                    <span id="LatestSymbolHelpInline" class="form-text">
+                    | Enter a valid ticker symbol.
+                    </span>
                     <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="symbol" name="symbol" value="">
                 </fieldset>
 
                 <fieldset class="form-group">
-                    <label for="period">Period:</label>
+                    <label for="period" aria-labelledby="LatestPeriodHelpInline">Period</label>
+                    <span id="LatestPeriodHelpInline" class="form-text">
+                    | Enter a period over which to retrieve data ('1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max').
+                    </span>
                     <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="period" name="period" value="">
                 </fieldset>
 
                 <fieldset class="form-group">
-                    <label for="interval">Interval:</label>
+                    <label for="interval" aria-labelledby="LatestIntervalHelpInline">Interval</label>
+                    <span id="LatestIntervalHelpInline" class="form-text">
+                    | Enter an interval between data points in the retrieval ('1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo').
+                    </span>
                     <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="interval" name="interval" value="">
                 </fieldset>
                 
@@ -46,13 +55,36 @@
         <div id="get_price_spread_form" class="mt-4">
             <h2>Get Price Spread</h2>
             <form>
-                <label for="symbol_spread">Symbol:</label>
-                <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="symbol_spread" name="symbol_spread" value="">
-                <label for="period_spread">Period:</label>
-                <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="period_spread" name="period_spread" value="">
-                <label for="interval_spread">Interval:</label>
-                <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="interval_spread" name="interval_spread" value="">
-                <input class="btn btn-secondary form-control" type="submit" value="Submit">
+                <fieldset class="form-group">
+                    <label for="symbol_spread" aria-labelledby="SpreadSymbolHelpInline">Symbol</label>
+                    <span id="SpreadSymbolHelpInline" class="form-text">
+                    | Enter a valid ticker symbol.
+                    </span>
+                    <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="symbol_spread" name="symbol_spread" value="">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label for="period_spread" aria-labelledby="SpreadPeriodHelpInline">Period</label>
+                    <span id="SpreadPeriodHelpInline" class="form-text">
+                    | Enter a period over which to retrieve data ('1d', '5d', '1mo', '3mo', '6mo', '1y', '2y', '5y', '10y', 'ytd', 'max').
+                    </span>
+                    <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="period_spread" name="period_spread" value="">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <label for="interval_spread" aria-labelledby="SpreadIntervalHelpInline">Interval</label>
+                    <span id="SpreadIntervalHelpInline" class="form-text">
+                    | Enter an interval between data points in the retrieval ('1m', '2m', '5m', '15m', '30m', '60m', '90m', '1h', '1d', '5d', '1wk', '1mo', '3mo').
+                    </span>
+                    <input type="text" class="form-control" style="background-color: rgba(0, 0, 0, 0.25) ; color: #fff;"  id="interval_spread" name="interval_spread" value="">
+                </fieldset>
+
+                <fieldset class="form-group">
+                    <input class="btn btn-secondary form-control" type="submit" value="Submit">
+                </fieldset>
+                    
+                    
+                    
             </form>
             <div id="price_spread_result"></div>
         </div>
