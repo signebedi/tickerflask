@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TickerFlask</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>TickerFlask</h1>
+        <div id="get_latest_price_form" class="mt-4">
+            <h2>Get Latest Price</h2>
+            <form>
+                <label for="symbol">Symbol:</label><br>
+                <input type="text" id="symbol" name="symbol" value=""><br>
+                <label for="period">Period:</label><br>
+                <input type="text" id="period" name="period" value=""><br>
+                <label for="interval">Interval:</label><br>
+                <input type="text" id="interval" name="interval" value=""><br>
+                <input type="submit" value="Submit">
+            </form>
+            <div id="latest_price_result"></div>
+        </div>
+
+        <div id="get_price_spread_form" class="mt-4">
+            <h2>Get Price Spread</h2>
+            <form>
+                <label for="symbol_spread">Symbol:</label><br>
+                <input type="text" id="symbol_spread" name="symbol_spread" value=""><br>
+                <label for="period_spread">Period:</label><br>
+                <input type="text" id="period_spread" name="period_spread" value=""><br>
+                <label for="interval_spread">Interval:</label><br>
+                <input type="text" id="interval_spread" name="interval_spread" value=""><br>
+                <input type="submit" value="Submit">
+            </form>
+            <div id="price_spread_result"></div>
+        </div>
+    </div>
+
+    <script src="{{ url_for ('static', filename='main.js')}}"></script>
+</body>
+</html>
