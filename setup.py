@@ -13,10 +13,6 @@ def read_version():
 
 version = read_version()
 
-# Read README for long_description
-with open("README.md", "r", encoding="utf-8") as fh:
-    long_description = fh.read()
-
 # # Read requirements.txt for install_requires
 with open('requirements.txt', encoding="utf-8") as f:
     install_requires = f.read().splitlines()
@@ -31,8 +27,6 @@ setup(
     packages=find_packages(),
     install_requires=install_requires,
     classifiers=[
-        'Development Status :: 3 - Alpha',
-        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
