@@ -9,6 +9,10 @@ class InvalidIntervalException(Exception):
     """Raised when an invalid interval is provided."""
     pass
 
+class ExceedsMaximumIntervalException(Exception):
+    """Raised when the requested period and interval exceed the maximum data limit."""
+    pass
+
 class InvalidSymbolException(Exception):
     """Raised when an invalid stock symbol is provided."""
     pass
@@ -39,6 +43,8 @@ def get_latest_price(symbol: str, period: str = '1d', interval: str = '1d') -> T
         raise InvalidPeriodException(f"Invalid period '{period}'. Period must be one of {valid_periods}.")
     if interval not in valid_intervals:
         raise InvalidIntervalException(f"Invalid interval '{interval}'. Interval must be one of {valid_intervals}.")
+    if period not in ['1d', '5d', '7d'] and interval == '1m':
+        raise ExceedsMaximumIntervalException("1-minute interval data can be fetched for a maximum of 7 days.")
 
     ticker = yf.Ticker(symbol)
     historical_data = ticker.history(period=period, interval=interval)
@@ -71,6 +77,8 @@ def get_price_spread(symbol: str, period: str = '1d', interval: str = '1d') -> L
         raise InvalidPeriodException(f"Invalid period '{period}'. Period must be one of {valid_periods}.")
     if interval not in valid_intervals:
         raise InvalidIntervalException(f"Invalid interval '{interval}'. Interval must be one of {valid_intervals}.")
+    if period not in ['1d', '5d', '7d'] and interval == '1m':
+        raise ExceedsMaximumIntervalException("1-minute interval data can be fetched for a maximum of 7 days.")
 
     ticker = yf.Ticker(symbol)
     historical_data = ticker.history(period=period, interval=interval)
