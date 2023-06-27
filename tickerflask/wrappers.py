@@ -1,4 +1,5 @@
 import yfinance as yf
+import pandas as pd
 from typing import Tuple, List, Union, Dict, Any
 from .exceptions import *
 
@@ -70,7 +71,24 @@ def get_price_spread(symbol: str, period: str = '1d', interval: str = '1d') -> L
     dates_prices = [[str(date), price] for date, price in dates_prices]
     return dates_prices
 
+def get_dividend_frequency(dividends: pd.Series) -> str:
+    """
+    Determine the frequency of dividend payouts.
+    
+    :param dividends: A pandas Series of dividend payouts with DateTime index.
+    :return: The frequency of the dividend payouts.
+    """
+    dividends_per_year = dividends.groupby(dividends.index.year).count()
+    avg_dividends_per_year = dividends_per_year.mean()
 
+    if avg_dividends_per_year >= 4:
+        return "quarterly"
+    elif avg_dividends_per_year >= 2:
+        return "semi-annually"
+    elif avg_dividends_per_year >= 1:
+        return "annually"
+    else:
+        return "irregular"
 
 def get_dividend_report(symbol: str) -> Dict[str, Any]:
     """
@@ -94,7 +112,17 @@ def get_dividend_report(symbol: str) -> Dict[str, Any]:
 
     # Calculating Dividend Yield
     current_price = ticker.info['currentPrice']
-    annual_dividend = dividends.sum()  # assuming dividends are for a year
+
+    frequency = get_dividend_frequency(dividends)
+    if frequency == "quarterly":
+        annual_dividend = dividends.last('1Y').sum()
+    elif frequency == "semi-annually":
+        annual_dividend = dividends.last('6M').sum() * 2
+    elif frequency == "annually":
+        annual_dividend = dividends.last('1Y').sum()
+    else:
+        annual_dividend = dividends.sum()  # use with caution, as it assumes irregular dividends
+
     dividend_yield = annual_dividend / current_price
 
     # Calculating Dividend Payout Ratio
@@ -115,7 +143,8 @@ def get_dividend_report(symbol: str) -> Dict[str, Any]:
         'dividend_history': dividend_history,
         'dividend_yield': dividend_yield,
         'dividend_payout_ratio': dividend_payout_ratio,
-        'dividend_growth': dividend_growth,
+        'dividend_growth_5Y': dividend_growth,
+        'dividend_frequency': frequency,
     }
     return dividend_report
 
