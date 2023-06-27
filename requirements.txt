@@ -1,4 +1,5 @@
 Flask<3.0.0
 flask-signing<1.0.0
 yfinance<1.0.0
+pandas<3.0.0
 plotly<6.0.0
