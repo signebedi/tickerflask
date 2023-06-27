@@ -1,5 +1,5 @@
 import yfinance as yf
-from typing import Tuple, List, Union
+from typing import Tuple, List, Union, Dict, Any
 from .exceptions import *
 
 def get_latest_price(symbol: str, period: str = '1d', interval: str = '1d') -> Tuple[str, float]:
@@ -69,3 +69,53 @@ def get_price_spread(symbol: str, period: str = '1d', interval: str = '1d') -> L
     dates_prices = historical_data['Close'].reset_index().values.tolist()
     dates_prices = [[str(date), price] for date, price in dates_prices]
     return dates_prices
+
+
+
+def get_dividend_report(symbol: str) -> Dict[str, Any]:
+    """
+    Generate a dividend report for a given stock symbol.
+    
+    :param symbol: The stock ticker symbol.
+    :return: A dictionary with the dividend report.
+    :raises InvalidSymbolException: If the provided symbol is not valid.
+    """
+    if not isinstance(symbol, str) or len(symbol.strip()) == 0:
+        raise InvalidSymbolException("Symbol must be a non-empty string.")
+
+    ticker = yf.Ticker(symbol)
+    dividends = ticker.dividends
+
+    if dividends.empty:
+        raise NoDataException(f"No dividend data returned for symbol '{symbol}'.")
+
+    # Convert to dictionary and format dates as strings
+    dividend_history = {str(date): dividend for date, dividend in dividends.items()}
+
+    # Calculating Dividend Yield
+    current_price = ticker.info['currentPrice']
+    annual_dividend = dividends.sum()  # assuming dividends are for a year
+    dividend_yield = annual_dividend / current_price
+
+    # Calculating Dividend Payout Ratio
+    eps = ticker.info['trailingEps']  # earnings per share
+    if eps == 0:
+        dividend_payout_ratio = 0
+    else:
+        dividend_payout_ratio = annual_dividend / eps
+
+    # Calculating Dividend Growth (over the past five years)
+    five_years_dividends = dividends.last('5Y')
+    if not five_years_dividends.empty:
+        dividend_growth = (five_years_dividends.iloc[-1] - five_years_dividends.iloc[0]) / five_years_dividends.iloc[0]
+    else:
+        dividend_growth = 0
+
+    dividend_report = {
+        'dividend_history': dividend_history,
+        'dividend_yield': dividend_yield,
+        'dividend_payout_ratio': dividend_payout_ratio,
+        'dividend_growth': dividend_growth,
+    }
+    return dividend_report
+
