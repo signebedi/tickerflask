@@ -1,7 +1,7 @@
 from .__metadata__ import (__name__, __author__, __credits__, __version__, 
                        __license__, __maintainer__, __email__)
 from flask import Flask, request, jsonify, render_template
-from .wrappers import get_latest_price, get_price_spread
+from .wrappers import get_latest_price, get_price_spread, get_dividend_report
 import os, uuid, json, plotly
 import plotly.graph_objects as go
 
@@ -90,3 +90,13 @@ def price_spread_with_plotly():
     result['graphJSON'] = graphJSON
 
     return jsonify(result), 200
+
+
+@app.route('/get_dividend_report', methods=['GET'])
+def dividend_report():
+    symbol = request.args.get('symbol', default = '', type = str)
+    try:
+        result = get_dividend_report(symbol)
+        return jsonify(result), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 400
