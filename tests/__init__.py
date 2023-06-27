@@ -1,7 +1,8 @@
 import unittest
 import yfinance as yf
+import pandas as pd
 from unittest.mock import patch, MagicMock
-from tickerflask.wrappers import get_latest_price, get_price_spread
+from tickerflask.wrappers import get_latest_price, get_price_spread, get_dividend_frequency, get_dividend_report
 from tickerflask.exceptions import *
 
 
@@ -79,6 +80,46 @@ class TestGetPriceSpread(unittest.TestCase):
         with self.assertRaises(NoDataException):
             get_price_spread('AAPL', '1d', '1d')
 
+
+class TestGetDividendFrequency(unittest.TestCase):
+    def test_quarterly_dividends(self):
+        dividends = pd.Series(data=[0.5]*4, index=pd.date_range(start='1/1/2022', periods=4, freq='Q'))
+        self.assertEqual(get_dividend_frequency(dividends), "quarterly")
+
+    def test_semi_annually_dividends(self):
+        dividends = pd.Series(data=[0.5]*2, index=pd.date_range(start='1/1/2022', periods=2, freq='6M'))
+        self.assertEqual(get_dividend_frequency(dividends), "semi-annually")
+
+    def test_annually_dividends(self):
+        dividends = pd.Series(data=[0.5], index=pd.date_range(start='1/1/2022', periods=1, freq='Y'))
+        self.assertEqual(get_dividend_frequency(dividends), "annually")
+
+    def test_irregular_dividends(self):
+        dividends = pd.Series(data=[0.5, None, None, None], index=pd.date_range(start='1/1/2018', end='1/1/2022', periods=4))
+        self.assertEqual(get_dividend_frequency(dividends), "irregular")
+
+class TestGetDividendReport(unittest.TestCase):
+    @patch("yfinance.Ticker")
+    def test_invalid_symbol(self, mock_ticker):
+        with self.assertRaises(InvalidSymbolException):
+            get_dividend_report('')
+
+    @patch("yfinance.Ticker")
+    def test_no_dividends(self, mock_ticker):
+        mock_ticker.return_value.dividends = pd.Series()
+        with self.assertRaises(NoDataException):
+            get_dividend_report('AAPL')
+
+    @patch("yfinance.Ticker")
+    def test_valid_input(self, mock_ticker):
+        mock_ticker.return_value.dividends = pd.Series(data=[0.5]*4, index=pd.date_range(start='1/1/2022', periods=4, freq='Q'))
+        mock_ticker.return_value.info = {'currentPrice': 150, 'trailingEps': 5}
+
+        result = get_dividend_report('AAPL')
+
+        self.assertEqual(result['dividend_yield'], 0.5*4/150)
+        self.assertEqual(result['dividend_payout_ratio'], 0.5*4/5)
+        # Add more assertions for the other fields in the report
 
 if __name__ == '__main__':
     unittest.main()
