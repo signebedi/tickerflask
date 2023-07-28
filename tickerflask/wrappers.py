@@ -1,4 +1,5 @@
 import yfinance as yf
+import yahoo_fin.stock_info as si
 import pandas as pd
 from typing import Tuple, List, Union, Dict, Any
 from .exceptions import *
@@ -148,3 +149,23 @@ def get_dividend_report(symbol: str) -> Dict[str, Any]:
     }
     return dividend_report
 
+
+def get_pe_ratio(symbol: str) -> float:
+    """
+    Calculate the PE (Price to Earnings) ratio for a given stock symbol using yahoo_fin library.
+    
+    :param symbol: The stock ticker symbol.
+    :return: The PE ratio.
+    :raises InvalidSymbolException: If the provided symbol is not valid.
+    :raises NoDataException: If no data is returned for the given symbol.
+    """
+    if not isinstance(symbol, str) or len(symbol.strip()) == 0:
+        raise InvalidSymbolException("Symbol must be a non-empty string.")
+
+    quote_table = si.get_quote_table(symbol)
+
+    if 'PE Ratio (TTM)' not in quote_table:
+        raise NoDataException(f"No data returned for symbol '{symbol}'.")
+
+    pe_ratio = quote_table['PE Ratio (TTM)']
+    return pe_ratio
