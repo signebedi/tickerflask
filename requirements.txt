@@ -3,3 +3,5 @@ flask-signing<1.0.0
 yfinance<1.0.0
 pandas<3.0.0
 plotly<6.0.0
+requests_html<1.0.0
+yahoo_fin<1.0.0
